@@ -18,6 +18,14 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\Users\TEMP\RiderProjects\LaboratoriumASP.NET\WebApp
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/Users/TEMP/RiderProjects/LaboratoriumASP.NET/WebApp/Views/Calculator/Form.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FsY3VsYXRvclxGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Users/TEMP/RiderProjects/LaboratoriumASP.NET/WebApp/Views/Calculator/Result.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FsY3VsYXRvclxSZXN1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Users/TEMP/RiderProjects/LaboratoriumASP.NET/WebApp/Views/Home/About.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBYm91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
