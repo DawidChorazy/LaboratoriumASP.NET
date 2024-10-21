@@ -1,0 +1,29 @@
+﻿<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-6">
+            <h2>Kalkulator</h2>
+            <form action="Result" method="POST"> <!-- Użyj POST zamiast GET -->
+                <div class="mb-3">
+                    <label class="form-label" for="x">Liczba 1</label>
+                    <input class="form-control" type="number" name="X" step="0.00001" id="x"/> <!-- Użyj "X" -->
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="operator">Operator</label>
+                    <select name="Operator" id="operator" class="form-control"> <!-- Użyj select dla operatora -->
+                        <option value="Add">+</option>
+                        <option value="Sub">-</option>
+                        <option value="Mul">*</option>
+                        <option value="Div">/</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="y">Liczba 2</label>
+                    <input class="form-control" type="number" name="Y" step="0.00001" id="y"/> <!-- Użyj "Y" -->
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit">Oblicz</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
