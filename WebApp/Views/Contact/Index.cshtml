@@ -37,7 +37,7 @@
                 <div>
                     <a class = "btn btn-primary">Edit</a>
                     <a class = "btn btn-secondary">Details</a>
-                    <a class = "btn btn-danger">Delete</a>
+                    <a class = "btn btn-danger" asp-action="Delete" asp-route-id=@entry.Value.Id>Delete</a>
                 </div>
             </td>
         </tr>
