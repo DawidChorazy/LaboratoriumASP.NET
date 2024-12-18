@@ -37,6 +37,14 @@
             <input class="form-control"asp-for="Birth"/>
             <span asp-validation-for="Birth" class = "text-danger"></span>
         </div>
+        <div>
+            <label asp-for="Priority">Kategoria</label>
+            <div>
+                <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>
+            <select class="form-control" asp-for="Priority" asp-items="@Html.GetEnumSelectList<Priority>()"></select>
+        </div>
+        
         <button class ="btn btn-primary">Save</button>
     </form>
 </div>

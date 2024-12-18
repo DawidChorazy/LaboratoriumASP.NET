@@ -1,4 +1,4 @@
-﻿@model System.Collections.Generic.Dictionary<int,WebApp.Models.ContactModel>
+﻿@model List<ContactModel>
 
 @{
     ViewBag.Title = "title";
@@ -21,6 +21,9 @@
         <th>
             Actions
         </th>
+        <th>
+            Priorytet
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -28,16 +31,20 @@
     {
         <tr>
             <td>
-                @entry.Value.FirstName
+                @entry.FirstName
             </td>
             <td>
-                @entry.Value.LastName
+                @entry.LastName
+            </td>
+
+            <td>
+                @entry.Priority
             </td>
             <td>
                 <div>
                     <a class = "btn btn-primary">Edit</a>
                     <a class = "btn btn-secondary">Details</a>
-                    <a class = "btn btn-danger" asp-action="Delete" asp-route-id=@entry.Value.Id>Delete</a>
+                    <a class = "btn btn-danger" asp-action="Delete" asp-route-id=@entry.Id>Delete</a>
                 </div>
             </td>
         </tr>

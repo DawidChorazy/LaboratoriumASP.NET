@@ -5,6 +5,8 @@ namespace WebApp.Controllers;
 
 public class ContactController : Controller
 {
+    private readonly IContactService _contactService;
+    
     private static Dictionary<int, ContactModel> _contacts = new()
     {
         {1, new ContactModel() {Id = 1, FirstName = "Adam", LastName = "Abecki", Email = "adam@wsei.edu.pl", Birth = new DateOnly(2000,10,10), PhoneNumber = "+48 222 222 333"}},
@@ -13,11 +15,14 @@ public class ContactController : Controller
     };
 
     private static int currentId = 3;
-    
+    public ContactController(IContactService contactService)
+    {
+        _contactService = contactService ?? throw new ArgumentNullException(nameof(contactService));
+    }
     // Contact list
     public IActionResult Index()
     {
-        return View(_contacts);
+        return View(_contacts.Values.ToList());
     }
 
     // Adding contact form
@@ -30,22 +35,19 @@ public class ContactController : Controller
     [HttpPost]
     public IActionResult Add(ContactModel model)
     {
-        if (!ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            return View(model);
+            _contactService.Add(model);
+            return RedirectToAction("Index");
         }
-        else
-        {
-            model.Id = ++currentId;
-            _contacts.Add(model.Id , model);
-            return View("Index", _contacts);
-        }
+        
+        return View(model);
     }
 
     public IActionResult Delete(int id)
     {
-        _contacts.Remove(id);
-        return View("Index", _contacts);
+        ContactController._contacts.Remove(id);_contactService.Delete(id);
+        return View("Index", _contacts.Values.ToList());
     }
     
 }

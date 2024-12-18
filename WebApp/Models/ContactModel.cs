@@ -29,4 +29,9 @@ public class ContactModel
     [Phone]
     [RegularExpression("\\+\\d\\d \\d\\d\\d \\d\\d\\d \\d\\d\\d", ErrorMessage = "Enter number: +xx xxx xxx xxx")]
     public string PhoneNumber { get; set; }
+    
+    [Display(Name = "Priorytet")]
+    public Priority Priority { get; set; }
+    [HiddenInput]
+    public DateTime Created { get; set; }
 }
