@@ -17,5 +17,5 @@ namespace Data.Entities;
         [MinLength(9)]
         public string Phone { get; set; }
         [Column("birth_date")]
-        public DateOnly BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
     }

@@ -24,7 +24,7 @@ public class ContactModel
     public string Email { get; set; }
     
     [DataType(DataType.Date)]
-    public DateOnly Birth { get; set; }
+    public DateTime Birth { get; set; }
     
     [Phone]
     [RegularExpression("\\+\\d\\d \\d\\d\\d \\d\\d\\d \\d\\d\\d", ErrorMessage = "Enter number: +xx xxx xxx xxx")]

@@ -19,8 +19,8 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ContactEntity>().HasData(
-            new ContactEntity() { Id = 1, Name = "Adam", Email = "adam@wsei.edu.pl", Phone = "127813268163", BirthDate = new DateOnly(2000,10,10) },
-            new ContactEntity() { Id = 2, Name = "Ewa", Email = "ewa@wsei.edu.pl", Phone = "293443823478", BirthDate = new DateOnly(1999, 8, 10) }
+            new ContactEntity() { Id = 1, Name = "Adam", Email = "adam@wsei.edu.pl", Phone = "127813268163", BirthDate = new DateTime(2000,10,10) },
+            new ContactEntity() { Id = 2, Name = "Ewa", Email = "ewa@wsei.edu.pl", Phone = "293443823478", BirthDate = new DateTime(1999, 8, 10) }
         );
     }
 } 
