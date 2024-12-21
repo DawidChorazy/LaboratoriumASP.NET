@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.Models;
 
 namespace WebApp.Controllers;
@@ -29,7 +30,13 @@ public class ContactController : Controller
     [HttpGet]
     public IActionResult Add()
     {
-        return View();
+        
+        ContactModel model = new ContactModel();
+        model.Organizations =  _contactService
+            .FindAllOrganizations()
+            .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Title })
+            .ToList();
+        return View(model);
     }
     // Getting and saving new contact
     [HttpPost]
@@ -37,10 +44,18 @@ public class ContactController : Controller
     {
         if (ModelState.IsValid)
         {
-            _contactService.Add(model);
+            int newContactId = _contactService.Add(model);
+            model.Id = newContactId;  
+            _contacts.Add(model.Id, model);
             return RedirectToAction("Index");
         }
-        
+
+      
+        model.Organizations = _contactService
+            .FindAllOrganizations()
+            .Select(o => new SelectListItem() { Value = o.Id.ToString(), Text = o.Title })
+            .ToList();
+
         return View(model);
     }
 

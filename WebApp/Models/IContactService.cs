@@ -1,3 +1,5 @@
+using Data.Entities;
+
 namespace WebApp.Models;
 
 public interface IContactService
@@ -7,4 +9,8 @@ public interface IContactService
     void Update(ContactModel book);
     List<ContactModel> FindAll();
     ContactModel? FindById(int id);
+    
+    List<OrganizationEntity> FindAllOrganizationsForVieModel();
+    public List<OrganizationEntity> FindAllOrganizations();
+
 }

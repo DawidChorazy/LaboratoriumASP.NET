@@ -18,4 +18,7 @@ namespace Data.Entities;
         public string Phone { get; set; }
         [Column("birth_date")]
         public DateTime BirthDate { get; set; }
+        public int OrganizationId { get; set; }
+        public OrganizationEntity? Organization { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
     }
