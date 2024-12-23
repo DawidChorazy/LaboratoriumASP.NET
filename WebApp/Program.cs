@@ -10,42 +10,59 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
 
-        // Add services to the container.
-        builder.Services.AddRazorPages();
+        // Pobierz connection string
+        var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") 
+                               ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
+
+        // Konfiguracja DbContext
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(connectionString));
+
+        // Konfiguracja Identity
+        builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+        {
+            options.SignIn.RequireConfirmedAccount = true;
+        })
+        .AddRoles<IdentityRole>() // Dodanie ról
+        .AddEntityFrameworkStores<AppDbContext>();
+
+        // Usługi aplikacji
         builder.Services.AddControllersWithViews();
-        builder.Services.AddSingleton<IContactService, MemoryContactService>();
-        builder.Services.AddSingleton<IDateTimeProvider, CurrentDateTimeProvider>();
-        builder.Services.AddDefaultIdentity<IdentityUser>()       // dodać
-            .AddRoles<IdentityRole>()                             //
-            .AddEntityFrameworkStores<Data.AppDbContext>(); 
-        builder.Services.AddDbContext<Data.AppDbContext>();
+        builder.Services.AddRazorPages();
 
-        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
-        builder.Services.AddTransient<IContactService, EFContactService>();
-        builder.Services.AddMemoryCache(); 
+        // Rejestracja IContactService (użyj jednej implementacji)
+        builder.Services.AddTransient<IContactService, EFContactService>(); // Domyślnie EFContactService
+        builder.Services.AddSingleton<IDateTimeProvider, CurrentDateTimeProvider>();
+
+        // Cache i sesje
+        builder.Services.AddMemoryCache();
         builder.Services.AddSession();
+
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
+        // Środowisko deweloperskie
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
         {
             app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
+        // Middleware
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
-        app.UseAuthentication();                               
-        app.UseAuthorization();                                  
-        app.UseSession();                                        
-        app.MapRazorPages(); 
-        
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseSession();
 
+        // Trasy
+        app.MapRazorPages();
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");

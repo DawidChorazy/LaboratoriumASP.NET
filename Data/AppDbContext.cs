@@ -6,30 +6,24 @@ using Microsoft.EntityFrameworkCore;
 namespace Data;
 
 public class AppDbContext : IdentityDbContext<IdentityUser>
-{ 
-    public DbSet<ContactEntity> Contacts { get; set; } 
+{
+    public DbSet<ContactEntity> Contacts { get; set; }
     public DbSet<OrganizationEntity> Organizations { get; set; }
-    private string DbPath { get; set; } 
 
-    public AppDbContext() 
-    { 
-        var folder = Environment.SpecialFolder.LocalApplicationData; 
-        var path = Environment.GetFolderPath(folder); 
-        DbPath = System.IO.Path.Join(path, "contacts.db"); 
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder options) =>
-        options.UseSqlite($"Data Source={DbPath}");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         string ADMIN_ID = Guid.NewGuid().ToString();
         string ROLE_ID = Guid.NewGuid().ToString();
         string USER_ID = Guid.NewGuid().ToString();
         string ROLE_USER_ID = Guid.NewGuid().ToString();
 
-// dodanie roli administratora
+        // dodanie roli administratora
         modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
         {
             Name = "admin",
@@ -43,10 +37,9 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
             NormalizedName = "USER",
             Id = ROLE_USER_ID,
             ConcurrencyStamp = ROLE_USER_ID
-
         });
 
-// utworzenie administratora jako użytkownika
+        // utworzenie administratora jako użytkownika
         var admin = new IdentityUser
         {
             Id = ADMIN_ID,
@@ -57,22 +50,21 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
             NormalizedEmail = "ADAM@WSEI.EDU.PL"
         };
 
-// haszowanie hasła, najlepiej wykonać to poza programem i zapisać gotowy
-// PasswordHash
+        // haszowanie hasła
         PasswordHasher<IdentityUser> ph = new PasswordHasher<IdentityUser>();
         admin.PasswordHash = ph.HashPassword(admin, "1234abcd!@#$ABCD");
 
-// zapisanie użytkownika
+        // zapisanie użytkownika
         modelBuilder.Entity<IdentityUser>().HasData(admin);
 
-// przypisanie roli administratora użytkownikowi
+        // przypisanie roli administratora użytkownikowi
         modelBuilder.Entity<IdentityUserRole<string>>()
             .HasData(new IdentityUserRole<string>
             {
                 RoleId = ROLE_ID,
                 UserId = ADMIN_ID
             });
-        
+
         var user = new IdentityUser
         {
             Id = USER_ID,
@@ -82,31 +74,31 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
             NormalizedUserName = "USER",
             NormalizedEmail = "JAN@WSEI.EDU.PL"
         };
-        
+
         user.PasswordHash = ph.HashPassword(user, "5678efgh!@#$EFGH");
-        
+
         modelBuilder.Entity<IdentityUser>().HasData(user);
-        
+
         modelBuilder.Entity<IdentityUserRole<string>>()
             .HasData(new IdentityUserRole<string>
             {
                 RoleId = ROLE_USER_ID,
                 UserId = USER_ID
             });
-        
+
         modelBuilder.Entity<ContactEntity>()
             .HasOne(e => e.Organization)
             .WithMany(o => o.Contacts)
             .HasForeignKey(e => e.OrganizationId);
-        
+
         modelBuilder.Entity<ContactEntity>()
             .Property(e => e.OrganizationId)
             .HasDefaultValue(101);
-        
+
         modelBuilder.Entity<ContactEntity>()
             .Property(e => e.Created)
             .HasDefaultValue(DateTime.Now);
-        
+
         modelBuilder.Entity<OrganizationEntity>()
             .ToTable("organizations")
             .HasData(
@@ -125,7 +117,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
                     Regon = "0873439249",
                 }
             );
-        
+
         modelBuilder.Entity<ContactEntity>().HasData(
             new ContactEntity()
             {
@@ -144,7 +136,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
                 OrganizationId = 102,
             }
         );
-        
+
         modelBuilder.Entity<OrganizationEntity>()
             .OwnsOne(e => e.Address)
             .HasData(
