@@ -1,9 +1,11 @@
 using Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data;
 
-public class AppDbContext : DbContext 
+public class AppDbContext : IdentityDbContext<IdentityUser>
 { 
     public DbSet<ContactEntity> Contacts { get; set; } 
     public DbSet<OrganizationEntity> Organizations { get; set; }
@@ -21,7 +23,77 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-    
+        base.OnModelCreating(modelBuilder);
+        string ADMIN_ID = Guid.NewGuid().ToString();
+        string ROLE_ID = Guid.NewGuid().ToString();
+        string USER_ID = Guid.NewGuid().ToString();
+        string ROLE_USER_ID = Guid.NewGuid().ToString();
+
+// dodanie roli administratora
+        modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+        {
+            Name = "admin",
+            NormalizedName = "ADMIN",
+            Id = ROLE_ID,
+            ConcurrencyStamp = ROLE_ID
+        });
+        modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+        {
+            Name = "user",
+            NormalizedName = "USER",
+            Id = ROLE_USER_ID,
+            ConcurrencyStamp = ROLE_USER_ID
+
+        });
+
+// utworzenie administratora jako użytkownika
+        var admin = new IdentityUser
+        {
+            Id = ADMIN_ID,
+            Email = "adam@wsei.edu.pl",
+            EmailConfirmed = true,
+            UserName = "adam",
+            NormalizedUserName = "ADMIN",
+            NormalizedEmail = "ADAM@WSEI.EDU.PL"
+        };
+
+// haszowanie hasła, najlepiej wykonać to poza programem i zapisać gotowy
+// PasswordHash
+        PasswordHasher<IdentityUser> ph = new PasswordHasher<IdentityUser>();
+        admin.PasswordHash = ph.HashPassword(admin, "1234abcd!@#$ABCD");
+
+// zapisanie użytkownika
+        modelBuilder.Entity<IdentityUser>().HasData(admin);
+
+// przypisanie roli administratora użytkownikowi
+        modelBuilder.Entity<IdentityUserRole<string>>()
+            .HasData(new IdentityUserRole<string>
+            {
+                RoleId = ROLE_ID,
+                UserId = ADMIN_ID
+            });
+        
+        var user = new IdentityUser
+        {
+            Id = USER_ID,
+            Email = "jan@wsei.edu.pl",
+            EmailConfirmed = true,
+            UserName = "jan",
+            NormalizedUserName = "USER",
+            NormalizedEmail = "JAN@WSEI.EDU.PL"
+        };
+        
+        user.PasswordHash = ph.HashPassword(user, "5678efgh!@#$EFGH");
+        
+        modelBuilder.Entity<IdentityUser>().HasData(user);
+        
+        modelBuilder.Entity<IdentityUserRole<string>>()
+            .HasData(new IdentityUserRole<string>
+            {
+                RoleId = ROLE_USER_ID,
+                UserId = USER_ID
+            });
+        
         modelBuilder.Entity<ContactEntity>()
             .HasOne(e => e.Organization)
             .WithMany(o => o.Contacts)

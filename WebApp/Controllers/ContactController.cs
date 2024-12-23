@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.Models;
 
 namespace WebApp.Controllers;
-
+[Authorize(Roles = "Admin")]
 public class ContactController : Controller
 {
-    private readonly IContactService _contactService;
+    
     
     private static Dictionary<int, ContactModel> _contacts = new()
     {
@@ -16,14 +17,16 @@ public class ContactController : Controller
     };
 
     private static int currentId = 3;
+    private readonly IContactService _contactService;
+
     public ContactController(IContactService contactService)
     {
-        _contactService = contactService ?? throw new ArgumentNullException(nameof(contactService));
+        _contactService = contactService;
     }
-    // Contact list
-    public IActionResult Index()
+    [AllowAnonymous]
+    public ActionResult Index()
     {
-        return View(_contacts.Values.ToList());
+        return View(_contactService.FindAll());
     }
 
     // Adding contact form
