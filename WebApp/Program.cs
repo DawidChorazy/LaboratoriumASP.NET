@@ -2,6 +2,7 @@ using WebApp.Models;
 using Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Models.Olympics;
 
 namespace WebApp;
 
@@ -26,7 +27,10 @@ public class Program
         })
         .AddRoles<IdentityRole>() // Dodanie ról
         .AddEntityFrameworkStores<AppDbContext>();
-
+        builder.Services.AddDbContext<OlympicsContext>(options =>
+        {
+            options.UseSqlite(builder.Configuration["OlympicsContext:ConnectionString"]);
+        });
         // Usługi aplikacji
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
