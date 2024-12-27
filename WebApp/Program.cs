@@ -29,7 +29,7 @@ public class Program
         .AddEntityFrameworkStores<AppDbContext>();
         builder.Services.AddDbContext<OlympicsContext>(options =>
         {
-            options.UseSqlite(builder.Configuration["OlympicsContext:ConnectionString"]);
+            options.UseSqlite(builder.Configuration["OlympicsDatabase:ConnectionString"]);
         });
         // Usługi aplikacji
         builder.Services.AddControllersWithViews();
