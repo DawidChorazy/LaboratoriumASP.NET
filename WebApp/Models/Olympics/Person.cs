@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace WebApp.Models.Olympics;
+
+public partial class Person
+{
+    public int Id { get; set; }
+
+    public string? FullName { get; set; }
+
+    public string? Gender { get; set; }
+
+    public int? Height { get; set; }
+
+    public int? Weight { get; set; }
+    
+    public ICollection<Medal> Medals { get; set; } //dodano
+
+    public virtual ICollection<GamesCompetitor> GamesCompetitors { get; set; } = new List<GamesCompetitor>();
+}

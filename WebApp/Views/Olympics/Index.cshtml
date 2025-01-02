@@ -1,0 +1,108 @@
+
+@model WebApp.Controllers.PagingListAsync<WebApp.Models.Olympics.Person>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    CancellationToken token = CancellationToken.None;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.Height)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.Weight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.GamesCompetitors)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @await foreach (var item in Model.Data) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Height)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GamesCompetitors.Count)
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav aria-label="Books page navigation">
+    <ul class="pagination">
+        @if (Model.IsPrevious)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Movies"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page - 1)"
+                   asp-route-size="@Model.Size">
+                    Poprzednia
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link">Poprzednia</a>
+            </li>
+        }
+        <li class="page-item disabled">
+            <a class="page-link" >@Model.Page</a>
+        </li>
+        @if (Model.IsNext)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Movies"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page + 1)"
+                   asp-route-size="@Model.Size">
+                    Następna
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link">Następna</a>
+            </li>
+        }
+    </ul>
+</nav>
