@@ -21,17 +21,53 @@ namespace WebApp.Controllers
         // GET: Olympics
         public IActionResult Index(int page = 1, int size = 10)
         {
-            return View( PagingListAsync<Person>.Create(
-                (p, s) => 
-                    _context.People
-                        .OrderBy(b => b.FullName)
-                        .Skip((p - 1) * s)
-                        .Take(s)
-                        .AsAsyncEnumerable(),
-                _context.People.Count(),
+            var totalCount = _context.People.Count();
+
+            // Pobieranie danych do modelu widoku
+            var peopleWithMedals = _context.People
+                .OrderBy(p => p.FullName)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .Select(person => new PersonViewModel
+                {
+                    Id = person.Id,
+                    FullName = person.FullName,
+                    Weight = person.Weight,
+                    Height = person.Height,
+                    Gender = person.Gender,
+                    GoldMedals = _context.Medals.Count(m => m.Id == person.Id && m.MedalName == "Gold"),
+                    SilverMedals = _context.Medals.Count(m => m.Id == person.Id && m.MedalName == "Silver"),
+                    BronzeMedals = _context.Medals.Count(m => m.Id == person.Id && m.MedalName == "Bronze"),
+                    EventCount = _context.CompetitorEvents.Count(e => e.CompetitorId == person.Id) // Liczba wydarzeń
+                });
+
+            
+            var pagingList = PagingListAsync<PersonViewModel>.Create(
+                (p, s) => peopleWithMedals.AsAsyncEnumerable(),
+                totalCount,
                 page,
-                size));
+                size
+            );
+
+            return View(pagingList);
         }
+        public IActionResult Events(int id)
+        {
+            var events = _context.CompetitorEvents
+                .Where(ce => ce.CompetitorId == id)
+                .Select(ce => new
+                {
+                    SportId = ce.Event.SportId,
+                    Sport = ce.Event.Sport,
+                    EventName = ce.Event.EventName,
+                    MedalId = ce.MedalId,
+                    Medal = ce.Medal.MedalName,
+                })
+                .ToList();
+
+            return View();
+        }
+
 
         // GET: Olympics/Details/5
         public async Task<IActionResult> Details(int? id)

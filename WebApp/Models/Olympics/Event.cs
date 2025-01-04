@@ -12,4 +12,6 @@ public partial class Event
     public string? EventName { get; set; }
 
     public virtual Sport? Sport { get; set; }
+    
+    
 }

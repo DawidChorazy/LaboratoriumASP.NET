@@ -15,7 +15,5 @@ public partial class Person
 
     public int? Weight { get; set; }
     
-    public ICollection<Medal> Medals { get; set; } //dodano
-
     public virtual ICollection<GamesCompetitor> GamesCompetitors { get; set; } = new List<GamesCompetitor>();
 }

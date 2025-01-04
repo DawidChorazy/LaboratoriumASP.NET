@@ -1,5 +1,5 @@
 
-@model WebApp.Controllers.PagingListAsync<WebApp.Models.Olympics.Person>
+@model WebApp.Controllers.PagingListAsync<WebApp.Models.Olympics.PersonViewModel>
 
 
 @{
@@ -29,9 +29,18 @@
             @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.Weight)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.GamesCompetitors)
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.BronzeMedals)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.SilverMedals)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.GoldMedals)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data.GetAsyncEnumerator(token).Current.EventCount)
+        </th>
+        
     </tr>
     </thead>
     <tbody>
@@ -50,13 +59,21 @@
                 @Html.DisplayFor(modelItem => item.Weight)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.GamesCompetitors.Count)
+                @Html.DisplayFor(modelItem => item.BronzeMedals)
             </td>
-
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.SilverMedals)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoldMedals)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventCount)
+            </td>
+            <td>
+                <a asp-action="Events" asp-route-id="@item.Id">
+                    @item.EventCount
+                </a>
             </td>
         </tr>
     }

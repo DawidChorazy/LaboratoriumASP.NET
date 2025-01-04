@@ -1,0 +1,26 @@
+@model List<dynamic>
+<h1>Events</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Sport Id</th>
+        <th>Sport Name</th>
+        <th>Event Name</th>
+        <th>Medal Id</th>
+        <th>Medal</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var ev in Model)
+    {
+        <tr>
+            <td>@ev.SportId</td>
+            <td>@ev.Sport</td>
+            <td>@ev.EventName</td>
+            <td>@ev.MedalId</td>
+            <td>@ev.Medal</td>
+        </tr>
+    }
+    </tbody>
+</table>

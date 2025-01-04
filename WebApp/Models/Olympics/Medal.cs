@@ -9,4 +9,5 @@ public partial class Medal
 
     public string? MedalName { get; set; }
     
+    
 }

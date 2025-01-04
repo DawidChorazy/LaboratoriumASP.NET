@@ -16,4 +16,5 @@ public partial class GamesCompetitor
     public virtual Game? Games { get; set; }
 
     public virtual Person? Person { get; set; }
+    
 }
