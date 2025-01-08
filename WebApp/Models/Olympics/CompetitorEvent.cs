@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models.Olympics;
 
 public partial class CompetitorEvent
 {
     public int? EventId { get; set; }
-
     public int? CompetitorId { get; set; }
 
     public int? MedalId { get; set; }
@@ -16,4 +16,5 @@ public partial class CompetitorEvent
     public virtual Event? Event { get; set; }
 
     public virtual Medal? Medal { get; set; }
+    
 }

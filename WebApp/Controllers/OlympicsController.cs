@@ -22,8 +22,7 @@ namespace WebApp.Controllers
         public IActionResult Index(int page = 1, int size = 10)
         {
             var totalCount = _context.People.Count();
-
-            // Pobieranie danych do modelu widoku
+            
             var peopleWithMedals = _context.People
                 .OrderBy(p => p.FullName)
                 .Skip((page - 1) * size)
@@ -38,7 +37,7 @@ namespace WebApp.Controllers
                     GoldMedals = _context.Medals.Count(m => m.Id == person.Id && m.MedalName == "Gold"),
                     SilverMedals = _context.Medals.Count(m => m.Id == person.Id && m.MedalName == "Silver"),
                     BronzeMedals = _context.Medals.Count(m => m.Id == person.Id && m.MedalName == "Bronze"),
-                    EventCount = _context.CompetitorEvents.Count(e => e.CompetitorId == person.Id) // Liczba wydarzeń
+                    EventCount = _context.CompetitorEvents.Count(e => e.CompetitorId == person.Id)
                 });
 
             
@@ -55,20 +54,65 @@ namespace WebApp.Controllers
         {
             var events = _context.CompetitorEvents
                 .Where(ce => ce.CompetitorId == id)
-                .Select(ce => new
+                .Select(ce => new EventViewModel
                 {
-                    SportId = ce.Event.SportId,
-                    Sport = ce.Event.Sport,
-                    EventName = ce.Event.EventName,
-                    MedalId = ce.MedalId,
-                    Medal = ce.Medal.MedalName,
+                    SportName = ce.Event.Sport != null ? ce.Event.Sport.SportName : "Brak danych",
+                    EventName = ce.Event != null ? ce.Event.EventName : "Brak danych",
+                    Medal = ce.Medal != null ? ce.Medal.MedalName : "Brak medalu"
                 })
                 .ToList();
 
-            return View();
+            return View(events);
+        }
+
+        [HttpGet]
+        public IActionResult AddEvent()
+        {
+            // Utworzenie pustego modelu, który będzie zawierał dane do formularza
+            var model = new AddEventViewModel
+            {
+                // Pobranie list konkurentów, wydarzeń i medali
+                Competitors = _context.People.ToList(),
+                Events = _context.Events.ToList(),
+                Medals = _context.Medals.ToList()
+            };
+
+            return View(model); // Przekazanie modelu do widoku
+        }
+
+        [HttpPost]
+        public IActionResult AddEvent(AddEventViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Utworzenie nowego rekordu CompetitorEvent
+                var competitorEvent = new CompetitorEvent
+                {
+                    CompetitorId = model.CompetitorId,
+                    EventId = model.EventId,
+                    MedalId = model.MedalId // Może być null, jeśli brak medalu
+                };
+
+                // Dodanie rekordu do kontekstu
+                _context.CompetitorEvents.Add(competitorEvent);
+                _context.SaveChanges();
+
+                // Przekierowanie na stronę główną lub listę
+                return RedirectToAction("Index");
+            }
+
+            // Jeśli model jest nieprawidłowy, odśwież widok z nowymi danymi
+            model.Competitors = _context.People.ToList();
+            model.Events = _context.Events.ToList();
+            model.Medals = _context.Medals.ToList();
+
+            // Przekazanie modelu z błędami walidacji z powrotem do widoku
+            return View(model);
         }
 
 
+
+        
         // GET: Olympics/Details/5
         public async Task<IActionResult> Details(int? id)
         {

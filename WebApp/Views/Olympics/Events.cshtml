@@ -1,25 +1,32 @@
-@model List<dynamic>
-<h1>Events</h1>
+@model List<WebApp.Models.Olympics.EventViewModel>
+
+<h1>Lista wydarzeń sportowca</h1>
 
 <table class="table">
     <thead>
     <tr>
-        <th>Sport Id</th>
-        <th>Sport Name</th>
-        <th>Event Name</th>
-        <th>Medal Id</th>
+        <th>Nazwa dyscypliny</th>
+        <th>Nazwa wydarzenia</th>
+        <th>Olimpiada</th>
+        <th>Sezon</th>
+        <th>Wiek podczas wydarzenia</th>
         <th>Medal</th>
+        <th>Dodaj udział</th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var ev in Model)
+    @foreach (var item in Model)
     {
         <tr>
-            <td>@ev.SportId</td>
-            <td>@ev.Sport</td>
-            <td>@ev.EventName</td>
-            <td>@ev.MedalId</td>
-            <td>@ev.Medal</td>
+            <td>@item.SportName</td>
+            <td>@item.EventName</td>
+            <td>@item.Olympics</td>
+            <td>@item.Season</td>
+            <td>@item.AgeDuringEvent</td>
+            <td>@item.Medal</td>
+            <td>
+                <a asp-action="AddEvent" asp-route-id="@item.EventName" class="btn btn-primary">Dodaj wydarzenie</a>
+            </td>
         </tr>
     }
     </tbody>

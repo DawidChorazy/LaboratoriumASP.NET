@@ -1,0 +1,21 @@
+<h1>Dodaj udział sportowca w wydarzeniu</h1>
+
+<form method="post" asp-action="AddEvent">
+    <div class="form-group">
+        <label for="SportName">Nazwa dyscypliny</label>
+        <input type="text" id="SportName" name="SportName" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="EventName">Nazwa wydarzenia</label>
+        <input type="text" id="EventName" name="EventName" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Olympics">Olimpiada</label>
+        <input type="text" id="Olympics" name="Olympics" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="AgeDuringEvent">Wiek podczas wydarzenia</label>
+        <input type="number" id="AgeDuringEvent" name="AgeDuringEvent" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-success">Dodaj</button>
+</form>

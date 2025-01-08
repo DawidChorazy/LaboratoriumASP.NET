@@ -68,9 +68,6 @@
                 @Html.DisplayFor(modelItem => item.GoldMedals)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EventCount)
-            </td>
-            <td>
                 <a asp-action="Events" asp-route-id="@item.Id">
                     @item.EventCount
                 </a>
@@ -80,13 +77,13 @@
     </tbody>
 </table>
 
-<nav aria-label="Books page navigation">
+<nav aria-label="People page navigation">
     <ul class="pagination">
         @if (Model.IsPrevious)
         {
             <li class="page-item">
                 <a class="page-link"
-                   asp-controller="Movies"
+                   asp-controller="Olympics"
                    asp-action="Index"
                    asp-route-page="@(Model.Page - 1)"
                    asp-route-size="@Model.Size">
@@ -100,14 +97,16 @@
                 <a class="page-link">Poprzednia</a>
             </li>
         }
+
         <li class="page-item disabled">
-            <a class="page-link" >@Model.Page</a>
+            <a class="page-link">@Model.Page</a>
         </li>
+
         @if (Model.IsNext)
         {
             <li class="page-item">
                 <a class="page-link"
-                   asp-controller="Movies"
+                   asp-controller="Olympics"
                    asp-action="Index"
                    asp-route-page="@(Model.Page + 1)"
                    asp-route-size="@Model.Size">
